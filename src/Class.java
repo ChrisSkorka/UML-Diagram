@@ -10,8 +10,8 @@ public class Class {
     private static final int spacingH = 10;
     private static final int MAX_TEXT_WIDTH = 200;
 
-    private ArrayList<WrappedText> properties = new ArrayList<>();
-    private ArrayList<WrappedText> methods = new ArrayList<>();
+    private ArrayList<String> properties = new ArrayList<>();
+    private ArrayList<String> methods = new ArrayList<>();
     private ArrayList<Class> subclasses = new ArrayList<>();
 
     private String className;
@@ -30,11 +30,11 @@ public class Class {
     }
 
     void addMethod(String method){
-        methods.add(new WrappedText(method, MAX_TEXT_WIDTH));
+        methods.add(method);
     }
 
     void addProperty(String property){
-        properties.add(new WrappedText(property, MAX_TEXT_WIDTH));
+        properties.add(property);
     }
 
     void tree(int x){
@@ -137,11 +137,11 @@ public class Class {
     public String toString(){
         String string = "class " + className + " extends " + superClassName;
 
-        for(WrappedText wrappedText : properties)
-            string += "\n" + wrappedText;
+        for(String property : properties)
+            string += "\n" + property;
 
-        for(WrappedText wrappedText : methods)
-            string += "\n" + wrappedText;
+        for(String method : methods)
+            string += "\n" + method;
 
         if(!subclasses.isEmpty()){
             string += "\n(";

@@ -27,12 +27,12 @@ public class UML extends JPanel {
 
         String file = "X:\\GitHub\\3802ICT-Modelling-and-Visualisation-Assignments\\UML\\out\\production\\UML\\classes1.txt"; // args[0];
         object = parseClassFile(file);
-        if(true)
-        return;
 
         size = object.getSize();
         size.width += 2*padding;
         size.height += 2*padding;
+
+        size.setSize(500,500);
 
         UML UMLDiagram = new UML();
 
@@ -160,7 +160,16 @@ public class UML extends JPanel {
         graphics.fillRect(0, 0, size.width, size.height);
 
         graphics.setColor(black);
-        object.draw(graphics, padding, padding);
+        // object.draw(graphics, padding, padding);
+
+        WrappedText wrappedText = new WrappedText("Hello here is my super long text that is hopefully gonna be split/wrapped properly and shows that looooooooooooooong words are wrapped around properly and very loooooooooooooooooooooooooooooon words are cut", g, 300);
+
+        int y = wrappedText.getLineHeight();
+        for(String line : wrappedText.getLines()){
+            graphics.drawString(line, 0, y);
+            y += wrappedText.getLineHeight() + WrappedText.LINE_SPACING;
+        }
+        System.out.println(wrappedText.getLineHeight());
 
         g.drawImage(image, 0, 0, null);
     }
