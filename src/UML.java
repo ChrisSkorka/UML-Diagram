@@ -2,8 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UML extends JPanel {
 
@@ -19,21 +25,19 @@ public class UML extends JPanel {
 //        }
 //        String file = args[0];
 
-        String file = "X:\\GitHub\\3802ICT-Modelling-and-Visualisation-Assignments\\UML\\out\\production\\UML\\classes6.txt"; // args[0];
-        ArrayList<Class> objects = getClassesFromFile(file);
-        if(objects == null)
-            return;
-
-        object = sortObjects(objects);
+        String file = "X:\\GitHub\\3802ICT-Modelling-and-Visualisation-Assignments\\UML\\out\\production\\UML\\classes1.txt"; // args[0];
+        object = parseClassFile(file);
+        if(true)
+        return;
 
         size = object.getSize();
         size.width += 2*padding;
         size.height += 2*padding;
 
-        UML treeDiagram = new UML();
+        UML UMLDiagram = new UML();
 
-        JFrame frame = new JFrame("Tree Diagram");
-        frame.setContentPane(treeDiagram);
+        JFrame frame = new JFrame("UML Diagram");
+        frame.setContentPane(UMLDiagram);
         frame.setSize(size.width, size.height);
         frame.setResizable(false);
         frame.pack();
@@ -41,62 +45,96 @@ public class UML extends JPanel {
         frame.setVisible(true);
     }
 
-    private static ArrayList<Class> getClassesFromFile(String file){
+    private static Class parseClassFile(String file){
 
-        ArrayList<Class> objects = new ArrayList<Class>();
+        // class className extends superClassName
+        Pattern subclassPattern = Pattern.compile("class (.+) extends (.+)");
 
+        // class className
+        Pattern classPattern = Pattern.compile("class (.+)");
+
+        // +|- methodName([arguments]): methodType
+        Pattern methodPattern = Pattern.compile(".+\\(.*\\):.+");
+
+        // +|- propertyName: propertyType
+        Pattern propertyPattern = Pattern.compile(".+:.+");
+
+        final String objectName = "Object";
+        Class object = new Class(objectName, null);
+        Class last = object;
+
+        // create class table with object as initial entry
+        HashMap<String, Class> classes = new HashMap<>();
+        classes.put(objectName, object);
+
+        // ready classes from file into table
         try(
-                BufferedReader br = new BufferedReader(
-                        new FileReader(file)
-                )
+            BufferedReader br = new BufferedReader(new FileReader(file))
         ){
             String line;
             while((line = br.readLine()) != null){
 
-                String[] words = line.split(" ");
-                String className = "";
-                String superClass = "Object";
+                // class className extends superClassName
+                Matcher matchSubclass = subclassPattern.matcher(line);
+                if(matchSubclass.find()){
 
-                if(words.length >= 2 && words[0].equals("class")){
-                    className = words[1];
+                    String className = matchSubclass.group(1);
+                    String superClassName = matchSubclass.group(2);
 
-                    if(words.length == 4 && words[2].equals("extends")){
-                        superClass = words[3];
-                    }
+                    last = new Class(className, superClassName);
+                    classes.put(className, last);
 
-                    Class newObject = new Class(className, superClass);
-                    objects.add(newObject);
-
-                }else{
-                    System.out.println("'"+line+"' could not be interpreteded");
+                    continue;
                 }
+
+                // class className
+                Matcher matchClass = classPattern.matcher(line);
+                if(matchClass.find()){
+
+                    String className = matchClass.group(1);
+
+                    last = new Class(className, objectName);
+                    classes.put(className, last);
+
+                    continue;
+                }
+
+                // +|- methodName([arguments]): methodType
+                Matcher matchMethod = methodPattern.matcher(line);
+                if(matchMethod.find()){
+
+                    last.addMethod(matchMethod.group(0));
+
+                    continue;
+                }
+
+                // +|- propertyName: propertyType
+                Matcher matchProperty = propertyPattern.matcher(line);
+                if(matchProperty.find()){
+
+                    last.addProperty(matchProperty.group(0));
+
+                    continue;
+                }
+
+                // System.out.println("Uninterpreted line: '"+line+"'");
             }
-        }catch(Exception e){
-            System.out.println("File could not be opened");
-            return null;
+        }catch(FileNotFoundException e){
+            System.err.println("File not found");
+            return object;
+        }catch (IOException e){
+            System.err.println("File could not be opened");
+            return object;
         }
 
-        return objects;
-    }
+        // build tree structure
+        for(Map.Entry<String, Class> entry : classes.entrySet()){
+            Class subclass = entry.getValue();
+            String superClassName = subclass.getSuperClassName();
 
-    private static Class sortObjects(ArrayList<Class> objects){
+            if(superClassName != null)
+                classes.get(superClassName).addSubclass(subclass);
 
-        Class object = new Class("Object", "");
-
-        boolean progressed = true;
-        while(progressed){
-
-            progressed = false;
-
-            for(int i = 0; i < objects.size(); i++){
-                Class newObject = objects.get(i);
-
-                if(object.add(newObject)){
-                    progressed = true;
-                    objects.remove(i);
-                }
-
-            }
         }
 
         return object;

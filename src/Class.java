@@ -1,39 +1,40 @@
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Class {
-
 
     private static final int width = 100;
     private static final int height = 30;
     private static final int spacingV = 50;
     private static final int spacingH = 10;
+    private static final int MAX_TEXT_WIDTH = 200;
 
-    public String className;
-    public String superClass;
+    private ArrayList<WrappedText> properties = new ArrayList<>();
+    private ArrayList<WrappedText> methods = new ArrayList<>();
+    private ArrayList<Class> subclasses = new ArrayList<>();
+
+    private String className;
+    private String superClassName;
+
     private ArrayList<Class> children;
 
-    public Class(String className, String superClass){
+    public Class(String className, String superClassName){
         this.className = className;
-        this.superClass = superClass;
+        this.superClassName = superClassName;
         children = new ArrayList<>();
     }
 
-    boolean add(Class newObject){
+    void addSubclass(Class subclass){
+        subclasses.add(subclass);
+    }
 
-        if(newObject.superClass.equals(className)){
-            children.add(newObject);
-            return true;
-        }
+    void addMethod(String method){
+        methods.add(new WrappedText(method, MAX_TEXT_WIDTH));
+    }
 
-        for(int i = 0; i < children.size(); i++){
-            Class child = children.get(i);
-
-            if(child.add(newObject))
-                return true;
-        }
-
-        return false;
+    void addProperty(String property){
+        properties.add(new WrappedText(property, MAX_TEXT_WIDTH));
     }
 
     void tree(int x){
@@ -42,7 +43,7 @@ public class Class {
             System.out.print("|   ");
         System.out.print("|-");
 
-        System.out.println(className +" extends "+ superClass);
+        // System.out.println(className +" extends "+ superClass);
 
         for(int i = 0; i < children.size(); i++){
             Class child = children.get(i);
@@ -123,6 +124,33 @@ public class Class {
         }
 
         return size;
+    }
+
+    public String getClassName(){
+        return className;
+    }
+
+    public String getSuperClassName(){
+        return superClassName;
+    }
+
+    public String toString(){
+        String string = "class " + className + " extends " + superClassName;
+
+        for(WrappedText wrappedText : properties)
+            string += "\n" + wrappedText;
+
+        for(WrappedText wrappedText : methods)
+            string += "\n" + wrappedText;
+
+        if(!subclasses.isEmpty()){
+            string += "\n(";
+            for(Class subclass : subclasses)
+                string += "\n" + subclass;
+            string += "\n)";
+        }
+
+        return string;
     }
 
 }
