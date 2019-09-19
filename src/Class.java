@@ -1,28 +1,42 @@
 import java.awt.*;
-import java.lang.reflect.Array;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 public class Class {
 
-    private static final int width = 100;
-    private static final int height = 30;
-    private static final int spacingV = 50;
-    private static final int spacingH = 10;
-    private static final int MAX_TEXT_WIDTH = 200;
+    private static final int MAX_TEXT_WIDTH = 300;
+    public static final int PADDING = 10;
+    private static final int ARROW_SIZE = 5;
+    private static final int CHILD_PARENT_SPACING = 20;
 
+    // class definition
+    private String className;
+    private String superClassName;
     private ArrayList<String> properties = new ArrayList<>();
     private ArrayList<String> methods = new ArrayList<>();
     private ArrayList<Class> subclasses = new ArrayList<>();
 
-    private String className;
-    private String superClassName;
+    // texts
+    WrappedText classNameWrappedText;
+    WrappedText propertiesWrappedText;
+    WrappedText methodsWrappedText;
 
-    private ArrayList<Class> children;
+    // layout
+    private int classNameHeight;
+    private int propertiesHeight;
+    private int methodsHeight;
+    private int blockWidth;
+    private int blockHeight;
+    private int subclassesWidth;
+    private int subclassesHeight;
+    private int subclassesVerticalSpacing = 0;
+
+    private int width;
+    private int height;
 
     public Class(String className, String superClassName){
         this.className = className;
         this.superClassName = superClassName;
-        children = new ArrayList<>();
     }
 
     void addSubclass(Class subclass){
@@ -37,93 +51,104 @@ public class Class {
         properties.add(property);
     }
 
-    void tree(int x){
+    void layout(Graphics graphics){
 
-        for(int i = 0; i < x; i++)
-            System.out.print("|   ");
-        System.out.print("|-");
+        classNameWrappedText = new WrappedText(className, graphics, MAX_TEXT_WIDTH, WrappedText.FONT_TITLE);
+        propertiesWrappedText = new WrappedText(properties.toArray(new String[]{}), graphics, MAX_TEXT_WIDTH, WrappedText.FONT_NORMAL);
+        methodsWrappedText = new WrappedText(methods.toArray(new String[]{}), graphics, MAX_TEXT_WIDTH, WrappedText.FONT_NORMAL);
 
-        // System.out.println(className +" extends "+ superClass);
+        classNameHeight = classNameWrappedText.getHeight() + 2* PADDING;
+        propertiesHeight = properties.isEmpty() ? 0 : propertiesWrappedText.getHeight() + 2* PADDING;
+        methodsHeight = methods.isEmpty() ? 0 : methodsWrappedText.getHeight() + 2* PADDING;
+        blockHeight = classNameHeight + propertiesHeight + methodsHeight;
 
-        for(int i = 0; i < children.size(); i++){
-            Class child = children.get(i);
-            child.tree(x+1);
-        }
-    }
-
-    void draw(Graphics graphics, int x, int y){
-
-        graphics.drawRoundRect(x, y, width, height, 8, 8);
-        graphics.drawString(className, x+10, y+20);
-
-        if(children.size() > 0){
-
-            int triangleConnectorX = x + width/2;
-            int triangleConnectorY = y + height;
-
-            int treeConnectorX = triangleConnectorX;
-            int treeConnectorY = triangleConnectorY + spacingV/2;
-
-            int[] triangleX = {triangleConnectorX, triangleConnectorX+7, triangleConnectorX+6, triangleConnectorX-6, triangleConnectorX-7};
-            int[] triangleY = {triangleConnectorY, triangleConnectorY+9, triangleConnectorY+10, triangleConnectorY+10, triangleConnectorY+9};
-
-            //int[] triangleX = {triangleConnectorX, triangleConnectorX+7, triangleConnectorX-7};
-            //int[] triangleY = {triangleConnectorY, triangleConnectorY+10, triangleConnectorY+10};
-
-            graphics.drawPolygon(triangleX, triangleY, triangleX.length);
-            graphics.drawLine(triangleConnectorX, triangleConnectorY+10, treeConnectorX, treeConnectorY);
+        int classNameWidth = classNameWrappedText.getWidth() + 2* PADDING;
+        int propertiesWidth = propertiesWrappedText.getWidth() + 2* PADDING;
+        int methodsWidth = methodsWrappedText.getWidth() + 2* PADDING;
+        blockWidth = Math.max(Math.max(classNameWidth, propertiesWidth), methodsWidth);
 
 
-            y += height + spacingV;
-            int treeConnectorEnd = treeConnectorX;
+        if(!subclasses.isEmpty()){
 
-            for(int i = 0; i < children.size(); i++){
-                Class child = children.get(i);
+            subclassesWidth = -PADDING;
+            subclassesHeight = 0;
+            subclassesVerticalSpacing = 2*CHILD_PARENT_SPACING;
 
-                if(i == 0)
-                    graphics.drawLine(x + width/2, treeConnectorY, x + width/2, y);
-                else
-                    graphics.drawArc(x + width/2 - 10, treeConnectorY, 10, 10, 0, 90);
-
-                graphics.drawLine(x + width/2, treeConnectorY+5, x + width/2, y);
-                treeConnectorEnd = Math.max(treeConnectorEnd, x + width/2);
-
-                child.draw(graphics, x, y);
-                x += child.getSize().width + spacingH;
+            for(Class subclass : subclasses){
+                subclass.layout(graphics);
+                subclassesWidth += subclass.getWidth() + PADDING;
+                subclassesHeight = Math.max(subclassesHeight, subclass.getHeight());
             }
 
-            if(children.size() > 1){
-
-                graphics.drawLine(treeConnectorX + 5, treeConnectorY, treeConnectorEnd - 5, treeConnectorY);
-                graphics.drawArc(treeConnectorX, treeConnectorY - 10, 10, 10, 180, 90);
-            }
         }
+
+        width  = Math.max(subclassesWidth, blockWidth);
+        height = blockHeight + subclassesVerticalSpacing + subclassesHeight;
     }
 
-    public Dimension getSize(){
-        Dimension size = new Dimension(0, 0);
+    void draw(Graphics2D graphics){
 
-        size.width = width + spacingH;
-        size.height = height;
+        AffineTransform relativeOrigin = graphics.getTransform();
+        int blockX = (width - blockWidth) / 2;
+        int titleX = (blockWidth - classNameWrappedText.getWidth()) / 2;
 
-        int childHeight = 0;
-        int x = 0;
-        for(int i = 0; i < children.size(); i++){
-            Class child = children.get(i);
+        // draw class name block and translate to bottom of it
+        graphics.translate(blockX, 0);
+        graphics.drawRect(0, 0, blockWidth, classNameHeight);
+        graphics.translate(titleX, PADDING);
+        classNameWrappedText.draw(graphics);
+        graphics.translate(-titleX, classNameHeight - PADDING);
 
-            Dimension childSize = child.getSize();
-
-            childHeight = Math.max(childHeight, childSize.height);
-            size.width = Math.max(size.width, x + childSize.width);
-
-            x += childSize.width + spacingH;
+        // draw properties block and translate to bottom of it
+        if(properties.size() > 0) {
+            graphics.drawRect(0, 0, blockWidth, propertiesHeight);
+            graphics.translate(PADDING, PADDING);
+            propertiesWrappedText.draw(graphics);
+            graphics.translate(-PADDING, propertiesHeight - PADDING);
         }
 
-        if(children.size() > 0){
-            size.height += spacingV + childHeight;
+        // draw methods block and translate to bottom of it
+        if(methods.size() > 0) {
+            graphics.drawRect(0, 0, blockWidth, methodsHeight);
+            graphics.translate(PADDING, PADDING);
+            methodsWrappedText.draw(graphics);
+            graphics.translate(-PADDING, methodsHeight - PADDING);
         }
 
-        return size;
+        if(!subclasses.isEmpty()){
+            int center = width / 2;
+
+            graphics.setTransform(relativeOrigin);
+
+            // arrow into this block
+            graphics.fillPolygon(new int[]{center, center+ARROW_SIZE, center-ARROW_SIZE}, new int[]{blockHeight, blockHeight+ARROW_SIZE, blockHeight+ARROW_SIZE}, 3);
+            graphics.drawLine(center, blockHeight+ARROW_SIZE, center, blockHeight + CHILD_PARENT_SPACING);
+
+            // horizontal line
+            int leftConnection = (width - subclassesWidth) / 2 + subclasses.get(0).getWidth() / 2;
+            int rightConnection = width - subclasses.get(subclasses.size()-1).getWidth() / 2 - (width - subclassesWidth) / 2;
+            graphics.drawLine(leftConnection, blockHeight + CHILD_PARENT_SPACING, rightConnection, blockHeight + CHILD_PARENT_SPACING);
+
+            graphics.translate((width - subclassesWidth) / 2, blockHeight + 2*CHILD_PARENT_SPACING);
+
+            for(Class subclass : subclasses){
+                graphics.drawLine(subclass.getWidth()/2, 0, subclass.getWidth()/2, -CHILD_PARENT_SPACING);
+                subclass.draw(graphics);
+                graphics.translate(subclass.getWidth() + PADDING, 0);
+            }
+
+        }
+
+        graphics.setTransform(relativeOrigin);
+
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public  int getHeight(){
+        return height;
     }
 
     public String getClassName(){

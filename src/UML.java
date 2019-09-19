@@ -13,9 +13,8 @@ import java.util.regex.Pattern;
 
 public class UML extends JPanel {
 
-    private static Class object;
-    private static Dimension size;
-    private static final int padding = 10;
+    private static JFrame frame;
+    private static ArrayList<Class> roots;
 
     public static void main(String args[]){
 
@@ -26,26 +25,20 @@ public class UML extends JPanel {
 //        String file = args[0];
 
         String file = "X:\\GitHub\\3802ICT-Modelling-and-Visualisation-Assignments\\UML\\out\\production\\UML\\classes1.txt"; // args[0];
-        object = parseClassFile(file);
-
-        size = object.getSize();
-        size.width += 2*padding;
-        size.height += 2*padding;
-
-        size.setSize(500,500);
+        roots = parseClassFile(file);
 
         UML UMLDiagram = new UML();
 
-        JFrame frame = new JFrame("UML Diagram");
+        frame = new JFrame("UML Diagram");
         frame.setContentPane(UMLDiagram);
-        frame.setSize(size.width, size.height);
+        frame.setSize(100, 100);
         frame.setResizable(false);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 
-    private static Class parseClassFile(String file){
+    private static ArrayList<Class> parseClassFile(String file){
 
         // class className extends superClassName
         Pattern subclassPattern = Pattern.compile("class (.+) extends (.+)");
@@ -59,13 +52,11 @@ public class UML extends JPanel {
         // +|- propertyName: propertyType
         Pattern propertyPattern = Pattern.compile(".+:.+");
 
-        final String objectName = "Object";
-        Class object = new Class(objectName, null);
-        Class last = object;
+        ArrayList<Class> roots = new ArrayList<>();
+        Class last = new Class("",""); // initial dummy class
 
         // create class table with object as initial entry
         HashMap<String, Class> classes = new HashMap<>();
-        classes.put(objectName, object);
 
         // ready classes from file into table
         try(
@@ -93,7 +84,7 @@ public class UML extends JPanel {
 
                     String className = matchClass.group(1);
 
-                    last = new Class(className, objectName);
+                    last = new Class(className, null);
                     classes.put(className, last);
 
                     continue;
@@ -121,10 +112,10 @@ public class UML extends JPanel {
             }
         }catch(FileNotFoundException e){
             System.err.println("File not found");
-            return object;
+            return roots;
         }catch (IOException e){
             System.err.println("File could not be opened");
-            return object;
+            return roots;
         }
 
         // build tree structure
@@ -132,44 +123,56 @@ public class UML extends JPanel {
             Class subclass = entry.getValue();
             String superClassName = subclass.getSuperClassName();
 
-            if(superClassName != null)
+            if(superClassName == null)
+                roots.add(subclass);
+            else
                 classes.get(superClassName).addSubclass(subclass);
 
         }
 
-        return object;
+        return roots;
     }
 
     public UML(){
         super();
-        setPreferredSize(size);
+        setPreferredSize(new Dimension(1,1));
         setFocusable(true);
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
+
+        int width = -Class.PADDING;
+        int height = 0;
+
+        for(Class root : roots) {
+            root.layout(g);
+            width += root.getWidth() + Class.PADDING;
+            height = Math.max(height, root.getHeight());
+        }
+
+        width += 2*Class.PADDING + 16;
+        height += 2*Class.PADDING + 40;
+        frame.setSize(width, height);
+
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = (Graphics2D) image.getGraphics();
 
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Color white = Color.decode("0xFEFEFE");
-        Color black = Color.decode("0x555555");
+        Color white = Color.WHITE;
+        Color black = Color.BLACK;
 
         graphics.setColor(white);
-        graphics.fillRect(0, 0, size.width, size.height);
+        graphics.fillRect(0, 0, width, height);
 
         graphics.setColor(black);
-        // object.draw(graphics, padding, padding);
 
-        WrappedText wrappedText = new WrappedText("Hello here is my super long text that is hopefully gonna be split/wrapped properly and shows that looooooooooooooong words are wrapped around properly and very loooooooooooooooooooooooooooooon words are cut", g, 300);
-
-        int y = wrappedText.getLineHeight();
-        for(String line : wrappedText.getLines()){
-            graphics.drawString(line, 0, y);
-            y += wrappedText.getLineHeight() + WrappedText.LINE_SPACING;
+        graphics.translate(Class.PADDING, Class.PADDING);
+        for(Class root : roots){
+            root.draw(graphics);
+            graphics.translate(root.getWidth() + Class.PADDING, 0);
         }
-        System.out.println(wrappedText.getLineHeight());
 
         g.drawImage(image, 0, 0, null);
     }
