@@ -29,6 +29,7 @@ public class UML extends JPanel {
         String file = args[0];
 
 //        String file = "X:\\GitHub\\3802ICT-Modelling-and-Visualisation-Assignments\\UML\\out\\production\\UML\\classes1.txt";
+//        String file = "C:\\Users\\chris\\GitHub\\3802ICT-Modelling-and-Visualisation-Assignments\\UML\\out\\production\\UML\\classes1.txt";
 
         roots = parseClassFile(file);
 
