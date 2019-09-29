@@ -14,6 +14,15 @@ public class WrappedText {
     public static final Font FONT_TITLE = new Font("Arial", Font.BOLD, 15);
     public static final int LINE_SPACING = 5;
 
+    /**
+     * create multiple text block with text wrapping.
+     * words are wrapped at last space within maxWidth or the last character within maxWidth if the line contains no spaces.
+     * each line after the first within a text block is indented.
+     * @param strings
+     * @param g
+     * @param maxWidth
+     * @param font
+     */
     public WrappedText(String[] strings, Graphics g, int maxWidth, Font font){
 
         this.font = font;
@@ -49,6 +58,7 @@ public class WrappedText {
                     before = before.substring(0, cut);
                 }
 
+                // add indent for each new line within a text block
                 String after = "    " + string.substring(cut + 1); // omit ' ' itself
 
                 lines.set(lines.size() - 1, before);
@@ -65,10 +75,23 @@ public class WrappedText {
         height = lines.isEmpty() ? 0 : lines.size() * (lineHeight + LINE_SPACING) - LINE_SPACING;
     }
 
+    /**
+     * create single text block with text wrapping.
+     * words are wrapped at last space within maxWidth or the last character within maxWidth if the line contains no spaces.
+     * each line after the first within this text block is indented.
+     * @param text
+     * @param g graphics
+     * @param maxWidth
+     * @param font
+     */
     public WrappedText(String text, Graphics g, int maxWidth, Font font){
         this(new String[]{text}, g, maxWidth, font);
     }
 
+    /**
+     * render this text on multiple lines
+     * @param graphics
+     */
     public void draw(Graphics graphics){
 
         graphics.setFont(font);
@@ -81,22 +104,26 @@ public class WrappedText {
 
     }
 
-    public ArrayList<String> getLines(){
-        return lines;
-    }
-
+    /**
+     * get actual width, smaller than maxWidth if possible, tight bounding box of text
+     * @return
+     */
     public int getWidth(){
         return width;
     }
 
+    /**
+     * get actual height, tight bounding box of text
+     * @return
+     */
     public int getHeight(){
         return height;
     }
 
-    public int getLineHeight(){
-        return lineHeight;
-    }
-
+    /**
+     * get source text this is created from
+     * @return
+     */
     public String toString(){
         return source;
     }

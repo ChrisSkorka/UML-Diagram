@@ -34,23 +34,44 @@ public class Class {
     private int width;
     private int height;
 
+    /**
+     * represents a class with an optional super class and subclasses
+     * @param className
+     * @param superClassName
+     */
     public Class(String className, String superClassName){
         this.className = className;
         this.superClassName = superClassName;
     }
 
+    /**
+     * add subclass
+     * @param subclass
+     */
     void addSubclass(Class subclass){
         subclasses.add(subclass);
     }
 
+    /**
+     * add method
+     * @param method
+     */
     void addMethod(String method){
         methods.add(method);
     }
 
+    /**
+     * add property
+     * @param property
+     */
     void addProperty(String property){
         properties.add(property);
     }
 
+    /**
+     * perform layout pass, recursively calls layout on subclasses, computes total size of this class
+     * @param graphics
+     */
     void layout(Graphics graphics){
 
         classNameWrappedText = new WrappedText(className, graphics, MAX_TEXT_WIDTH, WrappedText.FONT_TITLE);
@@ -86,6 +107,10 @@ public class Class {
         height = blockHeight + subclassesVerticalSpacing + subclassesHeight;
     }
 
+    /**
+     * draw this class, recursively call draw on subclasses, draws this class and all subclasses
+     * @param graphics
+     */
     void draw(Graphics2D graphics){
 
         AffineTransform relativeOrigin = graphics.getTransform();
