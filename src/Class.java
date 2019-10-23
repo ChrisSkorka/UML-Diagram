@@ -146,7 +146,7 @@ public class Class {
             graphics.setTransform(relativeOrigin);
 
             // arrow into this block
-            graphics.fillPolygon(new int[]{center, center+ARROW_SIZE, center-ARROW_SIZE}, new int[]{blockHeight, blockHeight+ARROW_SIZE, blockHeight+ARROW_SIZE}, 3);
+            graphics.drawPolygon(new int[]{center, center+ARROW_SIZE, center-ARROW_SIZE}, new int[]{blockHeight, blockHeight+ARROW_SIZE, blockHeight+ARROW_SIZE}, 3);
             graphics.drawLine(center, blockHeight+ARROW_SIZE, center, blockHeight + CHILD_PARENT_SPACING);
 
             // horizontal line

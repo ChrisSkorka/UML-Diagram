@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d3b018ed-75ac-425d-bd33-8d1ab7a0e1e3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Asteroid/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Asteroid/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Asteroid/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Asteroid/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FractalLandscape/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../FractalLandscape/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FractalLandscape/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../FractalLandscape/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UML.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UML.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Class.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Class.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,13 +18,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/UML.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="24" selection-start-line="24" selection-end-line="28" selection-end-column="30" />
+            <state relative-caret-position="-771">
+              <caret line="28" column="30" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Class.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="133" lean-forward="true" selection-start-line="133" selection-end-line="133" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#toString#0;class#Class#0" />
               </folding>
             </state>
           </provider>
@@ -50,15 +60,17 @@
     </findStrings>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/out/production/UML/classes1.txt" />
         <option value="$PROJECT_DIR$/src/WrappedText.java" />
-        <option value="$PROJECT_DIR$/src/Class.java" />
         <option value="$PROJECT_DIR$/src/UML.java" />
+        <option value="$PROJECT_DIR$/src/Class.java" />
+        <option value="$PROJECT_DIR$/classes1.txt" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -74,31 +86,11 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="UML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="UML" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="UML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="UML" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="UML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="UML" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="production" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="UML" type="b2602c69:ProjectViewProjectNode" />
-              <item name="UML" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="production" type="462c0819:PsiDirectoryNode" />
               <item name="UML" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -110,6 +102,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -135,6 +129,7 @@
     <configuration name="UML" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="UML" />
       <module name="UML" />
+      <option name="PROGRAM_PARAMETERS" value="&quot;classes1.txt&quot;" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -159,10 +154,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="33" width="1455" height="935" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="32" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26451612" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2675906" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -171,7 +165,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.30884185" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.30877572" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -207,39 +201,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Class.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-856">
-          <caret line="110" column="71" selection-start-line="110" selection-start-column="71" selection-end-line="110" selection-end-column="71" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1295#1296#0" expanded="true" />
-            <element signature="e#1335#1336#0" expanded="true" />
-            <element signature="e#1538#1539#0" expanded="true" />
-            <element signature="e#1573#1574#0" expanded="true" />
-            <element signature="e#1670#1671#0" expanded="true" />
-            <element signature="e#1710#1711#0" expanded="true" />
-            <element signature="e#6085#6086#0" expanded="true" />
-            <element signature="e#6113#6114#0" expanded="true" />
-            <element signature="e#6143#6144#0" expanded="true" />
-            <element signature="e#6172#6173#0" expanded="true" />
-            <element signature="e#6207#6208#0" expanded="true" />
-            <element signature="e#6239#6240#0" expanded="true" />
-            <element signature="e#6279#6280#0" expanded="true" />
-            <element signature="e#6316#6317#0" expanded="true" />
-            <element signature="method#toString#0;class#Class#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/out/production/UML/classes6.txt" />
     <entry file="file://$PROJECT_DIR$/out/production/UML/classes1.txt" />
     <entry file="file://$PROJECT_DIR$/src/UML.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="24" selection-start-line="24" selection-end-line="28" selection-end-column="30" />
+        <state relative-caret-position="-771">
+          <caret line="28" column="30" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="19" selection-start-line="5" selection-start-column="14" selection-end-line="8" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Class.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="133" lean-forward="true" selection-start-line="133" selection-end-line="133" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#toString#0;class#Class#0" />
           </folding>
         </state>
       </provider>

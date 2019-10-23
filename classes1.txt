@@ -1,0 +1,23 @@
+class Vehicle
+-speed: int
+-colour: int
++turnLeft(): void
++turnRight(): void
++break(): void
+
+class Bicycle extends Vehicle
++ringBell(): void
+
+class MotorVehicle extends Vehicle
+-sizeOfEngine: int
+-licensePlate: String
++getSizeOfEngine(): int
++getLicensePlate(): String
+
+class MotorBike extends MotorVehicle
++revEngine(): void
+
+class Car extends MotorVehicle
+-numberOfDoors: int
++setAirConditioning(on: boolean): void
++getNumberOfDoors(): void
